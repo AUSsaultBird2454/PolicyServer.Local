@@ -7,5 +7,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PolicyServer.Local\PolicyServer.Local.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+  </ItemGroup>
 
 </Project>

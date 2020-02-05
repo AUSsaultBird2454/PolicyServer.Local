@@ -1,12 +1,15 @@
 ﻿// Copyright (c) Brock Allen, Dominick Baier, Michele Leroux Bustamante. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System.Reflection;
 using Host.AspNetCorePolicy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PolicyServer.Runtime.Client;
 
 namespace Host
 {
@@ -21,6 +24,7 @@ namespace Host
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var migrationsAssembly = typeof(PolicyDatabaseContext).GetTypeInfo().Assembly.GetName().Name;
             // `AddControllersWithViews()` Calls AddAuthorization under the hood.
             // Below, in the call to `UseEndpoints(...)` we require authorization to all controllers (besides controllers/actions that have `[AllowAnonymous]`).
             services.AddControllersWithViews();
@@ -30,8 +34,12 @@ namespace Host
             services.AddAuthentication("Cookies")
                 .AddCookie("Cookies");
 
-            // this sets up the PolicyServer client library and policy provider - configuration is loaded from appsettings.json
-            services.AddPolicyServerClient(Configuration.GetSection("Policy"))
+            services.AddDbContext<PolicyDatabaseContext>(builder =>
+                builder.UseMySql("Server=localhost;Port=3306;Database=RadiantGuild_Policy;Uid=RadiantGuild;Pwd=ipGRA82nkjUFjg6zQ*!NTgEcSex&rSoH;",
+                    mysqlOptions => { mysqlOptions.MigrationsAssembly(migrationsAssembly); }));
+
+            // this sets up the PolicyServer client library and policy provider
+            services.AddDatabasePolicyServerClient()
                 .AddAuthorizationPermissionPolicies();
 
             // this adds the necessary handler for our custom medication requirement

@@ -14,13 +14,13 @@ namespace PolicyServer.Runtime.Client
     /// </summary>
     public class PolicyServerRuntimeClient : IPolicyServerRuntimeClient
     {
-        private readonly Policy _policy;
+        private readonly IPolicy _policy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolicyServerRuntimeClient"/> class.
         /// </summary>
         /// <param name="policy">The policy.</param>
-        public PolicyServerRuntimeClient(Policy policy)
+        public PolicyServerRuntimeClient(IPolicy policy)
         {
             _policy = policy;
         }

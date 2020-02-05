@@ -1,6 +1,3 @@
-﻿// Copyright (c) Brock Allen, Dominick Baier, Michele Leroux Bustamante. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +7,7 @@ using PolicyServer.Runtime.Client;
 
 namespace PolicyServer.Local
 {
-    /// <summary>
-    /// Models a policy
-    /// </summary>
-    public class Policy
+    public class PolicyFile : IPolicy
     {
         /// <summary>
         /// Gets the roles.
@@ -31,7 +25,7 @@ namespace PolicyServer.Local
         /// </value>
         public List<Permission> Permissions { get; internal set; } = new List<Permission>();
         
-        internal Task<PolicyResult> EvaluateAsync(ClaimsPrincipal user)
+        public Task<PolicyResult> EvaluateAsync(ClaimsPrincipal user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
